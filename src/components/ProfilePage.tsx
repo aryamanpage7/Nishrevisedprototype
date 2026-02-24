@@ -3,6 +3,8 @@ import { User, Settings, ChevronRight, Trophy, Target, Flame, Calendar, Clock, S
 import { motion } from 'motion/react';
 import exampleImage from 'figma:asset/958ef1d4893422032759752829bb61342a64daca.png';
 
+const PROFILE_IMG = 'https://images.unsplash.com/photo-1697517530015-616c6ec84fa9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBtYW4lMjBwb3J0cmFpdCUyMGhlYWRzaG90fGVufDF8fHx8MTc3MTMyNTU3MXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral';
+
 interface ProfilePageProps {
   role?: 'shooter' | 'coach' | null;
 }
@@ -97,41 +99,7 @@ export function ProfilePage({ role }: ProfilePageProps) {
 
       {/* Achievements */}
       {isShooter && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Trophy size={16} className="text-[#F1C40F]" />
-              <h3 className="text-white text-sm" style={{ fontWeight: 700 }}>Achievements</h3>
-            </div>
-            <span className="text-xs text-gray-600">3 of 5</span>
-          </div>
-
-          <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
-            {achievements.map((ach, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 + i * 0.05 }}
-                className={`flex-shrink-0 w-24 rounded-[16px] p-3 border text-center ${
-                  ach.unlocked 
-                    ? 'bg-[#1A1A1A] border-[#222]' 
-                    : 'bg-[#0a0a0a] border-[#151515] opacity-50'
-                }`}
-              >
-                <span className="text-2xl block mb-1">{ach.icon}</span>
-                <span className={`text-[10px] block ${ach.unlocked ? 'text-white' : 'text-gray-600'}`} style={{ fontWeight: 600 }}>
-                  {ach.label}
-                </span>
-                <span className="text-[8px] text-gray-600 block mt-0.5">{ach.desc}</span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+        null
       )}
 
       {/* Training Calendar Summary (Shooter) */}

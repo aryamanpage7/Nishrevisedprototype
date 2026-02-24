@@ -5,7 +5,7 @@ import {
 } from 'recharts';
 import {
   TrendingUp, ArrowUpRight, ArrowDownRight, Calendar, Trophy,
-  Target, Flame, Star, Zap, Crosshair,
+  Target, Flame, Star, Zap, Crosshair, CheckCircle, AlertCircle, Sparkles,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -51,6 +51,27 @@ const skillRadarData = [
   { skill: 'Trigger', value: 91, fullMark: 100 },
   { skill: 'Recovery', value: 70, fullMark: 100 },
   { skill: 'Focus', value: 85, fullMark: 100 },
+];
+
+const insights = [
+  {
+    title: 'Hip Alignment',
+    status: 'warning',
+    detail: 'Your hip stability decreased 15% in last 10 shots. Try widening your stance slightly.',
+    score: 72,
+  },
+  {
+    title: 'Shoulder Position',
+    status: 'good',
+    detail: 'Excellent shoulder stability. Consistent across all sessions this week.',
+    score: 94,
+  },
+  {
+    title: 'Trigger Discipline',
+    status: 'good',
+    detail: 'Clean trigger pull with minimal jerk. Keep it up!',
+    score: 88,
+  },
 ];
 
 /* ── Custom Tooltip ──────────────────────────────────────── */
@@ -103,8 +124,8 @@ export function PerformanceReports() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-2xl text-white tracking-tight" style={{ fontWeight: 700 }}>Your Progress</h1>
-        <p className="text-sm text-gray-500">Track your journey to precision</p>
+        <h1 className="text-xl text-white tracking-tight" style={{ fontWeight: 700 }}>Your Progress</h1>
+        <p className="text-[11px] text-gray-500 mt-0.5">Track your journey to precision</p>
       </motion.header>
 
       {/* Progress Highlight */}
@@ -445,6 +466,64 @@ export function PerformanceReports() {
           </div>
         </motion.div>
       </div>
+
+      {/* ── Latest AI Insights ─────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55 }}
+      >
+        <div className="flex items-center gap-2 mb-3">
+          <Sparkles size={14} className="text-[#E67E22]" />
+          <h3 className="text-white text-sm" style={{ fontWeight: 700 }}>Latest Insights</h3>
+        </div>
+
+        <div className="space-y-3">
+          {insights.map((insight, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 + i * 0.08 }}
+              className="bg-[#1A1A1A] rounded-[18px] p-4 border border-[#222]"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-7 h-7 rounded-full flex items-center justify-center"
+                    style={{
+                      backgroundColor: insight.status === 'good' ? 'rgba(39,174,96,0.1)' : 'rgba(230,126,34,0.1)',
+                    }}
+                  >
+                    {insight.status === 'good' ? (
+                      <CheckCircle size={14} className="text-[#27AE60]" />
+                    ) : (
+                      <AlertCircle size={14} className="text-[#E67E22]" />
+                    )}
+                  </div>
+                  <span className="text-white text-sm" style={{ fontWeight: 600 }}>{insight.title}</span>
+                </div>
+                <span
+                  className={`text-sm ${insight.score >= 85 ? 'text-[#27AE60]' : 'text-[#E67E22]'}`}
+                  style={{ fontWeight: 800 }}
+                >
+                  {insight.score}%
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 leading-relaxed ml-9">{insight.detail}</p>
+
+              <div className="mt-3 ml-9 h-[5px] bg-[#222] rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${insight.score}%` }}
+                  transition={{ delay: 0.7 + i * 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  className={`h-full rounded-full ${insight.score >= 85 ? 'bg-[#27AE60]' : 'bg-[#E67E22]'}`}
+                />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
     </div>
   );
 }

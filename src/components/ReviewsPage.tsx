@@ -49,8 +49,8 @@ export function ReviewsPage() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-2xl text-white tracking-tight" style={{ fontWeight: 700 }}>Sessions</h1>
-        <p className="text-sm text-gray-500">{mockSessions.length} total · {pendingCount} need review</p>
+        <h1 className="text-xl text-white tracking-tight" style={{ fontWeight: 700 }}>Sessions</h1>
+        <p className="text-[11px] text-gray-500 mt-0.5">{mockSessions.length} total · {pendingCount} need review</p>
       </motion.header>
 
       {/* Search */}
@@ -66,7 +66,7 @@ export function ReviewsPage() {
           placeholder="Search sessions..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-[#111] border border-[#222] rounded-[14px] py-3.5 pl-11 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#2E86C1]/50 transition-colors text-sm"
+          className="w-full bg-[#111] border border-[#1A1A1A] rounded-2xl py-3 pl-11 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#2E86C1]/40 transition-colors text-sm"
         />
       </motion.div>
 
