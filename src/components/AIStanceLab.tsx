@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, Camera, ChevronRight, Play, Lock } from 'lucide-react';
+import { Zap, Camera, ChevronRight, Play, Lock, Target } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const drills = [
@@ -9,7 +9,11 @@ const drills = [
   { name: 'Mental Imagery', duration: '12 min', difficulty: 'Expert', unlocked: false },
 ];
 
-export function AIStanceLab() {
+interface AIStanceLabProps {
+  onStartSession?: (type: 'practice' | 'match') => void;
+}
+
+export function AIStanceLab({ onStartSession }: AIStanceLabProps) {
   return (
     <div className="p-5 space-y-5 pb-32">
       {/* Header */}
@@ -23,41 +27,64 @@ export function AIStanceLab() {
           </div>
           <div>
             <h1 className="text-xl text-white tracking-tight" style={{ fontWeight: 700 }}>Training Lab</h1>
-            <p className="text-[11px] text-gray-500 -mt-0.5">AI-powered stance analysis & guided drills</p>
+            <p className="text-[11px] text-gray-500 -mt-0.5">AI-powered stance analysis & drills</p>
           </div>
         </div>
       </motion.header>
+
+      {/* ── Start a Session ──────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.05 }}
+        className="bg-[#1A1A1A] rounded-[22px] p-5 border border-[#222] relative overflow-hidden"
+      >
+        <div className="flex items-center gap-2 mb-3">
+          <Target size={14} className="text-[#E67E22]" />
+          <span className="text-[10px] text-gray-400 uppercase tracking-wider" style={{ fontWeight: 700 }}>
+            Start a Session
+          </span>
+        </div>
+
+        <p className="text-sm text-gray-500 mb-4">
+          Log your shots and track your performance in real time.
+        </p>
+
+        <div className="flex gap-3">
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => onStartSession?.('practice')}
+            className="flex-1 bg-[#E67E22] rounded-2xl py-3.5 flex flex-col items-center justify-center gap-0.5"
+          >
+            <div className="flex items-center gap-1.5">
+              <Target size={14} className="text-[#050505]" />
+              <span className="text-[#050505] text-sm" style={{ fontWeight: 700 }}>Self-Led</span>
+            </div>
+            
+          </motion.button>
+
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => onStartSession?.('match')}
+            className="flex-1 bg-[#27AE60] rounded-2xl py-3.5 flex flex-col items-center justify-center gap-0.5"
+          >
+            <div className="flex items-center gap-1.5">
+              <Play size={14} className="text-[#050505]" fill="#050505" />
+              <span className="text-[#050505] text-sm" style={{ fontWeight: 700 }}>Coach-Led</span>
+            </div>
+            
+          </motion.button>
+        </div>
+      </motion.div>
 
       {/* ── AI Stance Capture ────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05 }}
+        transition={{ delay: 0.1 }}
         className="bg-[#1A1A1A] rounded-[22px] overflow-hidden border border-[#222]"
       >
-        <div className="aspect-[16/10] flex items-center justify-center relative bg-gradient-to-b from-[#111] to-[#0a0a0a]">
-          {/* Corner brackets */}
-          <div className="absolute inset-8">
-            <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-[#E67E22]/30 rounded-tl" />
-            <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-[#E67E22]/30 rounded-tr" />
-            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-[#E67E22]/30 rounded-bl" />
-            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-[#E67E22]/30 rounded-br" />
-          </div>
-
-          <div className="text-center space-y-3 relative z-10">
-            <motion.div
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="w-16 h-16 rounded-full bg-[#E67E22]/10 border border-[#E67E22]/20 flex items-center justify-center mx-auto"
-            >
-              <Camera size={28} className="text-[#E67E22]" />
-            </motion.div>
-            <div>
-              <p className="text-gray-300 text-sm" style={{ fontWeight: 600 }}>Analyze your stance</p>
-              <p className="text-gray-600 text-xs mt-1">AI will analyze your posture in real-time</p>
-            </div>
-          </div>
-        </div>
+        
 
         {/* Single prominent capture button */}
         <div className="p-4">

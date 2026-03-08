@@ -1,5 +1,5 @@
 import React from 'react';
-import { Target, Shield, ChevronRight } from 'lucide-react';
+import { Target, Shield, ChevronRight, Hand } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface RoleSelectProps {
@@ -32,7 +32,7 @@ export function RoleSelect({ userName, onSelectRole }: RoleSelectProps) {
             transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
             className="w-14 h-14 rounded-2xl bg-[#E67E22]/10 border border-[#E67E22]/20 flex items-center justify-center mb-5"
           >
-            <span className="text-2xl">👋</span>
+            <Hand size={24} className="text-[#E67E22]" />
           </motion.div>
 
           <h1 className="text-3xl text-white tracking-tight" style={{ fontWeight: 700 }}>

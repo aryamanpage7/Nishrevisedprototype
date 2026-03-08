@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Settings, ChevronRight, Trophy, Target, Flame, Calendar, Clock, Shield, Star, LogOut, Bell, Globe, Smartphone } from 'lucide-react';
+import { User, Settings, ChevronRight, Trophy, Target, Flame, Calendar, Clock, Shield, Star, LogOut, Bell, Globe, Smartphone, Gem, type LucideIcon } from 'lucide-react';
 import { motion } from 'motion/react';
 import exampleImage from 'figma:asset/958ef1d4893422032759752829bb61342a64daca.png';
 
@@ -10,11 +10,11 @@ interface ProfilePageProps {
 }
 
 const achievements = [
-  { icon: '🎯', label: '10+ Club', desc: 'Score 10+ avg in a session', unlocked: true },
-  { icon: '🔥', label: 'On Fire', desc: '7-day training streak', unlocked: true },
-  { icon: '💎', label: 'Diamond Hands', desc: '94% hold stability', unlocked: true },
-  { icon: '🏆', label: 'Match Ready', desc: 'Complete all pre-match drills', unlocked: false },
-  { icon: '⭐', label: 'Top 10%', desc: 'Reach top 10% score ranking', unlocked: false },
+  { icon: Target, color: '#E67E22', label: '10+ Club', desc: 'Score 10+ avg in a session', unlocked: true },
+  { icon: Flame, color: '#E74C3C', label: 'On Fire', desc: '7-day training streak', unlocked: true },
+  { icon: Gem, color: '#2E86C1', label: 'Diamond Hands', desc: '94% hold stability', unlocked: true },
+  { icon: Trophy, color: '#27AE60', label: 'Match Ready', desc: 'Complete all pre-match drills', unlocked: false },
+  { icon: Star, color: '#9B59B6', label: 'Top 10%', desc: 'Reach top 10% score ranking', unlocked: false },
 ];
 
 const menuItems = [
@@ -27,7 +27,7 @@ const menuItems = [
 
 export function ProfilePage({ role }: ProfilePageProps) {
   const isShooter = role === 'shooter';
-  const name = isShooter ? 'Arjun Sharma' : 'Coach Rajeev';
+  const name = isShooter ? 'Aryaman Sharma' : 'Coach Rajesh';
   const subtitle = isShooter ? 'Air Rifle · National Level' : 'Head Coach · Air Rifle';
 
   return (
@@ -99,7 +99,35 @@ export function ProfilePage({ role }: ProfilePageProps) {
 
       {/* Achievements */}
       {isShooter && (
-        null
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <h3 className="text-white text-sm mb-3" style={{ fontWeight: 700 }}>Achievements</h3>
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+            {achievements.map((a, i) => {
+              const Icon = a.icon;
+              return (
+                <div
+                  key={i}
+                  className={`flex-shrink-0 w-[100px] bg-[#1A1A1A] rounded-[16px] p-3 border text-center ${
+                    a.unlocked ? 'border-[#222]' : 'border-[#1A1A1A] opacity-40'
+                  }`}
+                >
+                  <div
+                    className="w-10 h-10 rounded-xl mx-auto flex items-center justify-center mb-2"
+                    style={{ backgroundColor: a.unlocked ? `${a.color}15` : '#1A1A1A' }}
+                  >
+                    <Icon size={18} style={{ color: a.unlocked ? a.color : '#555' }} />
+                  </div>
+                  <span className="text-[10px] text-white block" style={{ fontWeight: 600 }}>{a.label}</span>
+                  <span className="text-[8px] text-gray-600 block mt-0.5">{a.desc}</span>
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
       )}
 
       {/* Training Calendar Summary (Shooter) */}
@@ -207,7 +235,7 @@ export function ProfilePage({ role }: ProfilePageProps) {
         <span className="text-sm">Sign Out</span>
       </motion.button>
 
-      <p className="text-center text-[10px] text-gray-700">NISH v2.1.0 · Made with precision</p>
+      <p className="text-center text-[10px] text-gray-700">NISH v2.4.0 · Built for precision</p>
     </div>
   );
 }

@@ -54,7 +54,11 @@ export default function App() {
     switch (activeTab) {
       case 'dashboard':
         return role === 'shooter'
-          ? <ShooterDashboard onStartSession={(type: 'practice' | 'match') => { setSessionType(type); setInSession(true); }} />
+          ? <ShooterDashboard
+              onStartSession={(type: 'practice' | 'match') => { setSessionType(type); setInSession(true); }}
+              onNavigate={handleTabChange}
+              userName={userName}
+            />
           : <CoachDashboard />;
       case 'sessions':
         return <ReviewsPage />;
@@ -65,11 +69,15 @@ export default function App() {
       case 'reviews':
         return <ReviewsPage />;
       case 'ai-lab':
-        return <AIStanceLab />;
+        return <AIStanceLab onStartSession={(type: 'practice' | 'match') => { setSessionType(type); setInSession(true); }} />;
       case 'profile':
         return <ProfilePage role={role} />;
       default:
-        return <ShooterDashboard onStartSession={(type: 'practice' | 'match') => { setSessionType(type); setInSession(true); }} />;
+        return <ShooterDashboard
+          onStartSession={(type: 'practice' | 'match') => { setSessionType(type); setInSession(true); }}
+          onNavigate={handleTabChange}
+          userName={userName}
+        />;
     }
   };
 

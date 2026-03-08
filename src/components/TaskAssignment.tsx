@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Dumbbell, Brain, Crosshair, PenTool, Check, ChevronRight, Clock, Zap } from 'lucide-react';
+import { X, Dumbbell, Brain, Crosshair, PenTool, Check, ChevronRight, Clock, Zap, Blocks, Activity, Target, Wind, Film, Wrench, Footprints, type LucideIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface TaskAssignmentProps {
@@ -12,20 +12,20 @@ type Category = 'Physical' | 'Mental' | 'Pre-fire' | 'Custom';
 
 const PRESETS = {
   Physical: [
-    { id: 'p1', label: 'Wall Holding', duration: '15 mins', emoji: '🧱' },
-    { id: 'p2', label: 'Core Planks', duration: '3 sets', emoji: '💪' },
-    { id: 'p3', label: 'Cardio Run', duration: '30 mins', emoji: '🏃' },
-    { id: 'p4', label: 'Scatt Holding', duration: '20 mins', emoji: '🎯' },
+    { id: 'p1', label: 'Wall Holding', duration: '15 mins', icon: Blocks },
+    { id: 'p2', label: 'Core Planks', duration: '3 sets', icon: Dumbbell },
+    { id: 'p3', label: 'Cardio Run', duration: '30 mins', icon: Activity },
+    { id: 'p4', label: 'Scatt Holding', duration: '20 mins', icon: Crosshair },
   ],
   Mental: [
-    { id: 'm1', label: 'Visualization', duration: '10 mins', emoji: '🧘' },
-    { id: 'm2', label: 'Box Breathing', duration: '5 mins', emoji: '🌬️' },
-    { id: 'm3', label: 'Match Replay', duration: '15 mins', emoji: '🎬' },
+    { id: 'm1', label: 'Visualization', duration: '10 mins', icon: Brain },
+    { id: 'm2', label: 'Box Breathing', duration: '5 mins', icon: Wind },
+    { id: 'm3', label: 'Match Replay', duration: '15 mins', icon: Film },
   ],
   'Pre-fire': [
-    { id: 'f1', label: 'Dry Fire', duration: '20 shots', emoji: '🔫' },
-    { id: 'f2', label: 'Equipment Check', duration: 'Checklist', emoji: '🔧' },
-    { id: 'f3', label: 'Stance Reset', duration: 'Drill', emoji: '🦶' },
+    { id: 'f1', label: 'Dry Fire', duration: '20 shots', icon: Crosshair },
+    { id: 'f2', label: 'Equipment Check', duration: 'Checklist', icon: Wrench },
+    { id: 'f3', label: 'Stance Reset', duration: 'Drill', icon: Footprints },
   ]
 };
 
@@ -148,7 +148,7 @@ export function TaskAssignment({ studentName, onClose, onAssign }: TaskAssignmen
                         : 'bg-[#111] border-[#1A1A1A] hover:border-[#333]'
                     }`}
                   >
-                    <span className="text-2xl">{task.emoji}</span>
+                    <task.icon size={24} className="text-2xl" />
                     <div className="flex-1">
                       <h4 className={`text-sm ${isSelected ? 'text-[#2E86C1]' : 'text-white'}`} style={{ fontWeight: 600 }}>
                         {task.label}

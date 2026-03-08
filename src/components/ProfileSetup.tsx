@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight, Check, Target, Shield, Crosshair, Award, Star } from 'lucide-react';
+import { ChevronRight, Check, Target, Shield, Crosshair, Award, Star, Zap, TrendingUp, Trophy, Wrench, Brain, Dumbbell, BarChart3, ClipboardList, Search, Users, type LucideIcon } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 const NISH_LOGO_URL = "figma:asset/f78922ecf19e5150bd6d00984ddf008f001137e5.png";
@@ -13,15 +13,15 @@ interface ProfileSetupProps {
 
 /* ── Step 1: Weapon Selection (Shooter) or Specialty (Coach) ── */
 const weaponOptions = [
-  { id: 'air-rifle', label: 'Air Rifle', emoji: '🎯', desc: '10m precision shooting' },
-  { id: 'air-pistol', label: 'Air Pistol', emoji: '🔫', desc: '10m pistol discipline' },
-  { id: 'both', label: 'Both', emoji: '⚡', desc: 'Multi-discipline athlete' },
+  { id: 'air-rifle', label: 'Air Rifle', icon: Crosshair, desc: '10m precision shooting' },
+  { id: 'air-pistol', label: 'Air Pistol', icon: Target, desc: '10m pistol discipline' },
+  { id: 'both', label: 'Both', icon: Zap, desc: 'Multi-discipline athlete' },
 ];
 
 const coachSpecialties = [
-  { id: 'air-rifle', label: 'Air Rifle Coach', emoji: '🎯', desc: 'Rifle technique specialist' },
-  { id: 'air-pistol', label: 'Air Pistol Coach', emoji: '🔫', desc: 'Pistol technique specialist' },
-  { id: 'general', label: 'General Coach', emoji: '🏅', desc: 'All-round shooting coach' },
+  { id: 'air-rifle', label: 'Air Rifle Coach', icon: Crosshair, desc: 'Rifle technique specialist' },
+  { id: 'air-pistol', label: 'Air Pistol Coach', icon: Target, desc: 'Pistol technique specialist' },
+  { id: 'general', label: 'General Coach', icon: Award, desc: 'All-round shooting coach' },
 ];
 
 /* ── Step 2: Experience Level ── */
@@ -34,21 +34,21 @@ const experienceLevels = [
 
 /* ── Step 3: Goals ── */
 const shooterGoals = [
-  { id: 'improve-score', label: 'Improve Score', emoji: '📈' },
-  { id: 'consistency', label: 'Build Consistency', emoji: '🎯' },
-  { id: 'competition', label: 'Prepare for Competition', emoji: '🏆' },
-  { id: 'technique', label: 'Fix Technique', emoji: '🔧' },
-  { id: 'mental', label: 'Mental Strength', emoji: '🧠' },
-  { id: 'fitness', label: 'Shooting Fitness', emoji: '💪' },
+  { id: 'improve-score', label: 'Improve Score', icon: TrendingUp },
+  { id: 'consistency', label: 'Build Consistency', icon: Target },
+  { id: 'competition', label: 'Prepare for Competition', icon: Trophy },
+  { id: 'technique', label: 'Fix Technique', icon: Wrench },
+  { id: 'mental', label: 'Mental Strength', icon: Brain },
+  { id: 'fitness', label: 'Shooting Fitness', icon: Dumbbell },
 ];
 
 const coachGoals = [
-  { id: 'track-athletes', label: 'Track Athletes', emoji: '📊' },
-  { id: 'assign-drills', label: 'Assign Drills', emoji: '📋' },
-  { id: 'review-sessions', label: 'Review Sessions', emoji: '🎯' },
-  { id: 'competition-prep', label: 'Competition Prep', emoji: '🏆' },
-  { id: 'technique-analysis', label: 'Technique Analysis', emoji: '🔍' },
-  { id: 'team-management', label: 'Team Management', emoji: '👥' },
+  { id: 'track-athletes', label: 'Track Athletes', icon: BarChart3 },
+  { id: 'assign-drills', label: 'Assign Drills', icon: ClipboardList },
+  { id: 'review-sessions', label: 'Review Sessions', icon: Target },
+  { id: 'competition-prep', label: 'Competition Prep', icon: Trophy },
+  { id: 'technique-analysis', label: 'Technique Analysis', icon: Search },
+  { id: 'team-management', label: 'Team Management', icon: Users },
 ];
 
 export function ProfileSetup({ role, userName, onComplete }: ProfileSetupProps) {
@@ -138,8 +138,8 @@ export function ProfileSetup({ role, userName, onComplete }: ProfileSetupProps) 
           className="text-sm text-gray-500 text-center mt-2 relative z-10"
         >
           {isShooter
-            ? 'Your training dashboard is ready. Let\'s hit the range!'
-            : 'Your coaching dashboard is ready. Time to build champions!'}
+            ? 'Your training dashboard is ready. Time to hit the range.'
+            : 'Your coaching dashboard is ready. Time to build champions.'}
         </motion.p>
 
         <motion.div
@@ -246,7 +246,7 @@ export function ProfileSetup({ role, userName, onComplete }: ProfileSetupProps) 
                     <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl ${
                       selectedWeapon === opt.id ? 'bg-[#E67E22]/15' : 'bg-[#222]'
                     }`}>
-                      {opt.emoji}
+                      <opt.icon size={24} className={selectedWeapon === opt.id ? 'text-[#E67E22]' : 'text-gray-500'} />
                     </div>
                     <div className="flex-1">
                       <span className="text-white text-[15px] block" style={{ fontWeight: 600 }}>{opt.label}</span>
@@ -378,7 +378,9 @@ export function ProfileSetup({ role, userName, onComplete }: ProfileSetupProps) 
                         <Check size={10} className="text-[#050505]" strokeWidth={3} />
                       </motion.div>
                     )}
-                    <span className="text-xl block mb-2">{goal.emoji}</span>
+                    <div className="block mb-2">
+                      <goal.icon size={22} className={selectedGoals.includes(goal.id) ? 'text-[#E67E22]' : 'text-gray-500'} />
+                    </div>
                     <span className="text-xs text-white block" style={{ fontWeight: 600 }}>{goal.label}</span>
                   </motion.button>
                 ))}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Camera, X, Pause, Play, Square, Target, ChevronLeft } from 'lucide-react';
+import { Camera, X, Square, Target, ChevronLeft, Send, Check, MessageSquare, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface SessionModeProps {
@@ -23,7 +23,6 @@ function InlineScorePicker({ shotNumber, onScore, onCancel }: {
 
   const handleDecimal = useCallback((d: number) => {
     if (wholeNum === null) return;
-    // 10 can only go up to 10.9
     const score = +(wholeNum + d / 10).toFixed(1);
     onScore(score);
   }, [wholeNum, onScore]);
@@ -55,7 +54,7 @@ function InlineScorePicker({ shotNumber, onScore, onCancel }: {
           </span>
         </div>
         <button onClick={onCancel} className="text-[10px] text-gray-600 uppercase tracking-wider" style={{ fontWeight: 600 }}>
-          Skip
+          Cancel
         </button>
       </div>
 
@@ -80,13 +79,13 @@ function InlineScorePicker({ shotNumber, onScore, onCancel }: {
                     key={n}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => setWholeNum(n)}
-                    className="w-[60px] h-[52px] rounded-2xl flex items-center justify-center border transition-colors"
+                    className="w-[68px] h-[58px] rounded-2xl flex items-center justify-center border-2 transition-colors"
                     style={{
-                      backgroundColor: `${color}10`,
-                      borderColor: `${color}20`,
+                      backgroundColor: `${color}1A`,
+                      borderColor: `${color}40`,
                     }}
                   >
-                    <span className="text-lg" style={{ fontWeight: 800, color, fontFamily: 'ui-monospace, monospace' }}>
+                    <span className="text-xl" style={{ fontWeight: 800, color, fontFamily: 'ui-monospace, monospace' }}>
                       {n}
                     </span>
                   </motion.button>
@@ -103,7 +102,6 @@ function InlineScorePicker({ shotNumber, onScore, onCancel }: {
             exit={{ opacity: 0, x: 20 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
           >
-            {/* Preview of selected whole */}
             <div className="text-center mb-3">
               <span className="text-2xl text-white" style={{ fontWeight: 800, fontFamily: 'ui-monospace, monospace' }}>
                 {wholeNum}.
@@ -121,16 +119,13 @@ function InlineScorePicker({ shotNumber, onScore, onCancel }: {
                     key={d}
                     whileTap={{ scale: 0.85 }}
                     onClick={() => handleDecimal(d)}
-                    className="w-[60px] h-[52px] rounded-2xl flex flex-col items-center justify-center border transition-colors"
+                    className="w-[68px] h-[58px] rounded-2xl flex items-center justify-center border-2 transition-colors"
                     style={{
-                      backgroundColor: `${color}10`,
-                      borderColor: `${color}20`,
+                      backgroundColor: `${color}1A`,
+                      borderColor: `${color}40`,
                     }}
                   >
-                    <span className="text-xs text-gray-500" style={{ fontWeight: 500, fontFamily: 'ui-monospace, monospace' }}>
-                      .{d}
-                    </span>
-                    <span className="text-sm -mt-0.5" style={{ fontWeight: 800, color, fontFamily: 'ui-monospace, monospace' }}>
+                    <span className="text-xl" style={{ fontWeight: 800, color, fontFamily: 'ui-monospace, monospace' }}>
                       {score.toFixed(1)}
                     </span>
                   </motion.button>
@@ -144,6 +139,225 @@ function InlineScorePicker({ shotNumber, onScore, onCancel }: {
   );
 }
 
+/* ── Session Summary Screen ──────────────────────────────── */
+function SessionSummary({ sessionType, scores, duration, onSubmitToCoach, onSaveOnly }: {
+  sessionType: 'practice' | 'match';
+  scores: number[];
+  duration: number;
+  onSubmitToCoach: (notes: string) => void;
+  onSaveOnly: () => void;
+}) {
+  const [notes, setNotes] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const avg = scores.length > 0 ? +(scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : 0;
+  const best = scores.length > 0 ? Math.max(...scores) : 0;
+  const lowest = scores.length > 0 ? Math.min(...scores) : 0;
+  const tens = scores.filter(s => s >= 10.0).length;
+  const tensPercent = scores.length > 0 ? Math.round((tens / scores.length) * 100) : 0;
+  const totalShots = sessionType === 'practice' ? 40 : 60;
+  const accentColor = sessionType === 'practice' ? '#E67E22' : '#27AE60';
+
+  const formatTime = (s: number) => {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    if (h > 0) return `${h}h ${m}m`;
+    return `${m}m ${sec}s`;
+  };
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+    setTimeout(() => onSubmitToCoach(notes), 2200);
+  };
+
+  if (submitted) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center px-8 bg-[#050505] relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#27AE60]/6 rounded-full blur-[100px]" />
+        </div>
+
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 12 }}
+          className="w-20 h-20 rounded-full bg-[#27AE60]/15 border-2 border-[#27AE60]/30 flex items-center justify-center mb-6 relative z-10"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.3, type: 'spring', stiffness: 300 }}
+          >
+            <Check size={36} className="text-[#27AE60]" strokeWidth={3} />
+          </motion.div>
+        </motion.div>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="text-xl text-white text-center relative z-10"
+          style={{ fontWeight: 700 }}
+        >
+          Submitted for Review
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="text-sm text-gray-500 text-center mt-2 relative z-10 max-w-[260px]"
+        >
+          Your coach will review this session and share feedback soon.
+        </motion.p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-full w-full bg-[#050505] flex flex-col overflow-y-auto no-scrollbar">
+      {/* Header */}
+      <div className="pt-14 px-5 pb-4">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center"
+        >
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: accentColor }} />
+            <span className="text-[10px] uppercase tracking-widest" style={{ fontWeight: 700, color: accentColor }}>
+              {sessionType === 'practice' ? 'Practice' : 'Match'} Complete
+            </span>
+          </div>
+          <h2 className="text-2xl text-white" style={{ fontWeight: 700 }}>Session Summary</h2>
+          <p className="text-xs text-gray-500 mt-1">{scores.length}/{totalShots} shots · {formatTime(duration)}</p>
+        </motion.div>
+      </div>
+
+      {/* Stats Grid */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="mx-5 mb-4"
+      >
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-[#1A1A1A] rounded-[18px] p-4 border border-[#222] text-center">
+            <span className="text-[9px] text-gray-500 uppercase tracking-wider block" style={{ fontWeight: 700 }}>Avg Score</span>
+            <span className="text-2xl text-[#27AE60] block mt-1" style={{ fontWeight: 800, fontFamily: 'ui-monospace, monospace' }}>
+              {avg.toFixed(1)}
+            </span>
+          </div>
+          <div className="bg-[#1A1A1A] rounded-[18px] p-4 border border-[#222] text-center">
+            <span className="text-[9px] text-gray-500 uppercase tracking-wider block" style={{ fontWeight: 700 }}>Best Shot</span>
+            <span className="text-2xl text-[#27AE60] block mt-1" style={{ fontWeight: 800, fontFamily: 'ui-monospace, monospace' }}>
+              {best.toFixed(1)}
+            </span>
+          </div>
+          <div className="bg-[#1A1A1A] rounded-[18px] p-4 border border-[#222] text-center">
+            <span className="text-[9px] text-gray-500 uppercase tracking-wider block" style={{ fontWeight: 700 }}>Lowest</span>
+            <span className="text-2xl text-[#E74C3C] block mt-1" style={{ fontWeight: 800, fontFamily: 'ui-monospace, monospace' }}>
+              {lowest.toFixed(1)}
+            </span>
+          </div>
+          <div className="bg-[#1A1A1A] rounded-[18px] p-4 border border-[#222] text-center">
+            <span className="text-[9px] text-gray-500 uppercase tracking-wider block" style={{ fontWeight: 700 }}>10+ Rate</span>
+            <span className="text-2xl text-[#E67E22] block mt-1" style={{ fontWeight: 800, fontFamily: 'ui-monospace, monospace' }}>
+              {tensPercent}%
+            </span>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Shot History */}
+      {scores.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.15 }}
+          className="mx-5 mb-4"
+        >
+          <span className="text-[10px] text-gray-500 uppercase tracking-wider mb-2 block" style={{ fontWeight: 700 }}>
+            All Shots
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {scores.map((score, i) => (
+              <div
+                key={i}
+                className="w-[42px] h-[34px] rounded-lg flex items-center justify-center border"
+                style={{
+                  backgroundColor: `${getScoreColor(score)}10`,
+                  borderColor: `${getScoreColor(score)}25`,
+                }}
+              >
+                <span className="text-[10px]" style={{ fontWeight: 700, color: getScoreColor(score), fontFamily: 'ui-monospace, monospace' }}>
+                  {score.toFixed(1)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Submit to Coach Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="mx-5 mb-4"
+      >
+        <div className="bg-[#1A1A1A] rounded-[20px] p-5 border border-[#222]">
+          <div className="flex items-center gap-2.5 mb-3">
+            <div className="w-8 h-8 rounded-full bg-[#2E86C1]/10 flex items-center justify-center">
+              <MessageSquare size={14} className="text-[#2E86C1]" />
+            </div>
+            <div>
+              <span className="text-white text-sm block" style={{ fontWeight: 600 }}>Add a Note</span>
+              <span className="text-[10px] text-gray-500">Optional — your coach will see this</span>
+            </div>
+          </div>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="e.g. Felt steady today, trigger timing was off in the last 10 shots..."
+            rows={3}
+            className="w-full bg-[#111] border border-[#222] rounded-2xl py-3 px-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#2E86C1]/40 transition-colors text-sm resize-none"
+          />
+        </div>
+      </motion.div>
+
+      {/* Action Buttons */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="mx-5 mb-10 space-y-3"
+      >
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          onClick={handleSubmit}
+          className="w-full py-4 bg-[#2E86C1] rounded-2xl flex items-center justify-center gap-2.5 shadow-lg shadow-[#2E86C1]/15"
+        >
+          <Send size={16} className="text-white" />
+          <span className="text-white text-sm" style={{ fontWeight: 700 }}>
+            Submit to Coach for Review
+          </span>
+        </motion.button>
+
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          onClick={onSaveOnly}
+          className="w-full py-4 bg-[#1A1A1A] rounded-2xl text-sm text-gray-300 border border-[#2A2A2A] flex items-center justify-center gap-2"
+          style={{ fontWeight: 600 }}
+        >
+          Save Without Submitting
+        </motion.button>
+      </motion.div>
+    </div>
+  );
+}
+
 /* ── Main SessionMode Component ──────────────────────────── */
 export function SessionMode({ sessionType, onExit }: SessionModeProps) {
   const totalShots = sessionType === 'practice' ? 40 : 60;
@@ -153,13 +367,14 @@ export function SessionMode({ sessionType, onExit }: SessionModeProps) {
   const [showEndConfirm, setShowEndConfirm] = useState(false);
   const [isScoring, setIsScoring] = useState(false);
   const [flashScore, setFlashScore] = useState<number | null>(null);
+  const [showSummary, setShowSummary] = useState(false);
   const historyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isRunning) return;
+    if (!isRunning || showSummary) return;
     const interval = setInterval(() => setSeconds(s => s + 1), 1000);
     return () => clearInterval(interval);
-  }, [isRunning]);
+  }, [isRunning, showSummary]);
 
   const formatTime = (s: number) => {
     const h = Math.floor(s / 3600);
@@ -177,9 +392,7 @@ export function SessionMode({ sessionType, onExit }: SessionModeProps) {
     setScores(prev => [...prev, score]);
     setIsScoring(false);
     setFlashScore(score);
-    // Brief flash, then clear
     setTimeout(() => setFlashScore(null), 1200);
-    // Scroll history to end
     setTimeout(() => {
       historyRef.current?.scrollTo({ left: historyRef.current.scrollWidth, behavior: 'smooth' });
     }, 100);
@@ -189,8 +402,27 @@ export function SessionMode({ sessionType, onExit }: SessionModeProps) {
     setIsScoring(false);
   };
 
+  const handleEndSession = () => {
+    setShowEndConfirm(false);
+    setIsRunning(false);
+    setShowSummary(true);
+  };
+
   const progress = totalShots > 0 ? (scores.length / totalShots) * 100 : 0;
   const accentColor = sessionType === 'practice' ? '#E67E22' : '#27AE60';
+
+  /* ── Session Summary View ── */
+  if (showSummary) {
+    return (
+      <SessionSummary
+        sessionType={sessionType}
+        scores={scores}
+        duration={seconds}
+        onSubmitToCoach={(_notes) => onExit()}
+        onSaveOnly={onExit}
+      />
+    );
+  }
 
   return (
     <div className="h-full w-full bg-[#050505] relative flex flex-col">
@@ -220,13 +452,13 @@ export function SessionMode({ sessionType, onExit }: SessionModeProps) {
             </div>
             <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
               <span className="text-[10px] text-gray-600 tracking-wider uppercase" style={{ fontWeight: 500 }}>
-                Point camera at target
+                Align camera with target
               </span>
             </div>
           </div>
         </div>
 
-        {/* Score flash overlay — brief confirmation */}
+        {/* Score flash overlay */}
         <AnimatePresence>
           {flashScore !== null && (
             <motion.div
@@ -283,7 +515,7 @@ export function SessionMode({ sessionType, onExit }: SessionModeProps) {
                   className="text-[10px] uppercase tracking-widest"
                   style={{ fontWeight: 700, color: accentColor }}
                 >
-                  {sessionType === 'practice' ? 'Practice' : 'Match'}
+                  {sessionType === 'practice' ? 'Practice Session' : 'Match Session'}
                 </span>
               </div>
               <div className="text-white text-2xl tracking-wider" style={{ fontFamily: 'ui-monospace, monospace', fontWeight: 700 }}>
@@ -324,7 +556,7 @@ export function SessionMode({ sessionType, onExit }: SessionModeProps) {
         </div>
       </div>
 
-      {/* ── Bottom Panel — transforms between controls & score picker ── */}
+      {/* ── Bottom Panel ── */}
       <div className="bg-[#0A0A0A] border-t border-[#1A1A1A] relative z-30">
 
         {/* Shot history strip */}
@@ -359,7 +591,6 @@ export function SessionMode({ sessionType, onExit }: SessionModeProps) {
 
         <AnimatePresence mode="wait">
           {isScoring ? (
-            /* ── Inline Score Picker (replaces action buttons) ── */
             <InlineScorePicker
               key="scoring"
               shotNumber={scores.length + 1}
@@ -367,7 +598,6 @@ export function SessionMode({ sessionType, onExit }: SessionModeProps) {
               onCancel={handleScoreCancel}
             />
           ) : (
-            /* ── Normal Action Buttons ── */
             <motion.div
               key="controls"
               initial={{ y: 20, opacity: 0 }}
@@ -407,19 +637,6 @@ export function SessionMode({ sessionType, onExit }: SessionModeProps) {
                     Capture
                   </span>
                 </motion.button>
-
-                {/* Pause / Resume */}
-                <motion.button
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => setIsRunning(!isRunning)}
-                  className="w-14 h-14 rounded-full bg-white/[0.06] border-2 border-white/10 flex items-center justify-center"
-                >
-                  {isRunning ? (
-                    <Pause size={20} className="text-white" fill="white" />
-                  ) : (
-                    <Play size={20} className="text-white ml-0.5" fill="white" />
-                  )}
-                </motion.button>
               </div>
             </motion.div>
           )}
@@ -447,17 +664,18 @@ export function SessionMode({ sessionType, onExit }: SessionModeProps) {
                 </div>
                 <h3 className="text-lg text-white mb-1" style={{ fontWeight: 700 }}>End Session?</h3>
                 <p className="text-sm text-gray-500">
-                  {scores.length}/{totalShots} shots recorded
+                  {scores.length}/{totalShots} shots recorded.{'\n'}You'll be able to review and submit.
                 </p>
               </div>
               <div className="space-y-3">
                 <motion.button
                   whileTap={{ scale: 0.97 }}
-                  onClick={onExit}
-                  className="w-full py-4 bg-[#E67E22] text-[#050505] rounded-2xl text-sm"
+                  onClick={handleEndSession}
+                  className="w-full py-4 bg-[#E67E22] text-[#050505] rounded-2xl text-sm flex items-center justify-center gap-2"
                   style={{ fontWeight: 700 }}
                 >
-                  Save &amp; End Session
+                  End & Review
+                  <ArrowRight size={16} />
                 </motion.button>
                 <motion.button
                   whileTap={{ scale: 0.97 }}

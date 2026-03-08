@@ -25,7 +25,7 @@ export function CoachDashboard() {
       >
         <div>
           <p className="text-sm text-gray-500">Welcome back</p>
-          <h1 className="text-2xl text-white tracking-tight" style={{ fontWeight: 700 }}>Coach Rajeev 👋</h1>
+          <h1 className="text-2xl text-white tracking-tight" style={{ fontWeight: 700 }}>Coach Rajesh</h1>
         </div>
         <motion.button 
           whileTap={{ scale: 0.9 }}

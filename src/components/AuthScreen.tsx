@@ -56,7 +56,7 @@ export function AuthScreen({ onComplete, defaultMode = 'signup' }: AuthScreenPro
           </h1>
           <p className="text-sm text-gray-500 mt-1.5">
             {mode === 'signup'
-              ? 'Start your precision journey today'
+              ? 'Join thousands of precision shooters'
               : 'Sign in to continue training'}
           </p>
         </motion.div>

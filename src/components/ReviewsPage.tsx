@@ -49,8 +49,8 @@ export function ReviewsPage() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-xl text-white tracking-tight" style={{ fontWeight: 700 }}>Sessions</h1>
-        <p className="text-[11px] text-gray-500 mt-0.5">{mockSessions.length} total · {pendingCount} need review</p>
+        <h1 className="text-xl text-white tracking-tight" style={{ fontWeight: 700 }}>Session Reviews</h1>
+        <p className="text-[11px] text-gray-500 mt-0.5">{mockSessions.length} total · {pendingCount} awaiting review</p>
       </motion.header>
 
       {/* Search */}
@@ -63,7 +63,7 @@ export function ReviewsPage() {
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
         <input
           type="text"
-          placeholder="Search sessions..."
+          placeholder="Search by athlete name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full bg-[#111] border border-[#1A1A1A] rounded-2xl py-3 pl-11 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#2E86C1]/40 transition-colors text-sm"

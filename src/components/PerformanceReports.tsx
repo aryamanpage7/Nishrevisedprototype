@@ -124,8 +124,8 @@ export function PerformanceReports() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-xl text-white tracking-tight" style={{ fontWeight: 700 }}>Your Progress</h1>
-        <p className="text-[11px] text-gray-500 mt-0.5">Track your journey to precision</p>
+        <h1 className="text-xl text-white tracking-tight" style={{ fontWeight: 700 }}>Insights</h1>
+        <p className="text-[11px] text-gray-500 mt-0.5">Your performance at a glance</p>
       </motion.header>
 
       {/* Progress Highlight */}

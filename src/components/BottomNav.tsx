@@ -11,8 +11,8 @@ interface BottomNavProps {
 export function BottomNav({ activeTab, onTabChange, role }: BottomNavProps) {
   const shooterTabs = [
     { id: 'dashboard', icon: Home, label: 'Home' },
-    { id: 'reports', icon: BarChart3, label: 'Insights' },
     { id: 'ai-lab', icon: Zap, label: 'Train' },
+    { id: 'reports', icon: BarChart3, label: 'Insights' },
     { id: 'profile', icon: User, label: 'Profile' },
   ];
 

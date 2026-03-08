@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Target, BarChart3, Users, ChevronRight, Crosshair, Zap, TrendingUp } from 'lucide-react';
+import { Target, BarChart3, Users, ChevronRight, Crosshair, Zap, TrendingUp, ArrowRight } from 'lucide-react';
+import onboardingImg1 from 'figma:asset/676c1c0d7bf1ae7c328a6f085ad59805ad6faf6e.png';
+import onboardingImg2 from 'figma:asset/75863ab144288790671dbf1479ba93871a5475d4.png';
+import onboardingImg3 from 'figma:asset/d723404ae6258aba852a8d4547740d898c6b9e64.png';
 
 interface OnboardingSlidesProps {
   onComplete: () => void;
@@ -14,8 +17,8 @@ const slides = [
     iconBg: '#E67E22',
     title: 'Track Every Shot',
     subtitle: 'with precision',
-    description: 'Point your camera at the target and NISH automatically detects and logs each shot with sub-millimeter accuracy.',
-    image: 'https://images.unsplash.com/photo-1754008506563-7bbb075737da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhaXIlMjByaWZsZSUyMHNob290ZXIlMjBwcmVjaXNpb24lMjBzcG9ydHxlbnwxfHx8fDE3NzE5MjM0MTh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    description: 'Aim at the target. NISH detects and logs each shot with sub-millimeter precision — automatically.',
+    image: onboardingImg1,
     stats: [
       { label: 'Accuracy', value: '99.2%' },
       { label: 'Detection', value: '<0.5s' },
@@ -28,8 +31,8 @@ const slides = [
     iconBg: '#2E86C1',
     title: 'AI-Powered',
     subtitle: 'analysis',
-    description: 'Get instant feedback on your stance, breathing, and trigger discipline. Our AI learns your patterns and suggests improvements.',
-    image: 'https://images.unsplash.com/photo-1586448910234-297fae7189e6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcG9ydHMlMjBhbmFseXRpY3MlMjBkYXNoYm9hcmQlMjB0ZWNobm9sb2d5fGVufDF8fHx8MTc3MTkyMzQyMnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    description: 'Get real-time feedback on your stance, breathing, and trigger discipline. Our AI learns your patterns and helps you improve.',
+    image: onboardingImg2,
     stats: [
       { label: 'Insights', value: 'Real-time' },
       { label: 'Drills', value: '50+' },
@@ -42,8 +45,8 @@ const slides = [
     iconBg: '#27AE60',
     title: 'Train Together',
     subtitle: 'with your coach',
-    description: 'Connect with your coach for personalized drills, session reviews, and real-time feedback. Elevate your game as a team.',
-    image: 'https://images.unsplash.com/photo-1765109396566-e315369d54e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcG9ydHMlMjBjb2FjaCUyMGF0aGxldGUlMjB0cmFpbmluZyUyMHRlYW18ZW58MXx8fHwxNzcxOTIzNDI1fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    description: 'Share sessions with your coach for personalized drills, live reviews, and targeted feedback. Train smarter, together.',
+    image: onboardingImg3,
     stats: [
       { label: 'Reviews', value: 'Live' },
       { label: 'Athletes', value: '1000+' },
@@ -147,9 +150,9 @@ export function OnboardingSlides({ onComplete }: OnboardingSlidesProps) {
       </AnimatePresence>
 
       {/* Bottom controls */}
-      <div className="px-7 pb-10 pt-4 flex items-center justify-between relative z-20">
+      <div className="px-7 pb-10 pt-4 flex flex-col gap-3 relative z-20">
         {/* Progress dots */}
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 mb-1">
           {slides.map((_, i) => (
             <motion.div
               key={i}
@@ -163,23 +166,27 @@ export function OnboardingSlides({ onComplete }: OnboardingSlidesProps) {
           ))}
         </div>
 
-        {/* Next / Get Started button */}
+        {/* Next / Get Started button — full width */}
         <motion.button
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: 0.97 }}
           onClick={handleNext}
-          className={`flex items-center gap-2 rounded-2xl transition-all ${
+          className={`w-full flex items-center justify-center gap-2.5 rounded-2xl py-4 transition-all ${
             isLast
-              ? 'bg-[#E67E22] px-7 py-4 shadow-lg shadow-[#E67E22]/20'
-              : 'bg-[#1A1A1A] border border-[#2A2A2A] px-5 py-4'
+              ? 'bg-[#E67E22] shadow-lg shadow-[#E67E22]/20'
+              : 'bg-[#1A1A1A] border border-[#2A2A2A]'
           }`}
         >
           <span
-            className={`text-sm ${isLast ? 'text-[#050505]' : 'text-white'}`}
+            className={`text-[15px] ${isLast ? 'text-[#050505]' : 'text-white'}`}
             style={{ fontWeight: 700 }}
           >
             {isLast ? 'Get Started' : 'Next'}
           </span>
-          <ChevronRight size={16} className={isLast ? 'text-[#050505]' : 'text-gray-500'} />
+          {isLast ? (
+            <ArrowRight size={18} className="text-[#050505]" />
+          ) : (
+            <ChevronRight size={18} className={isLast ? 'text-[#050505]' : 'text-gray-500'} />
+          )}
         </motion.button>
       </div>
     </div>
